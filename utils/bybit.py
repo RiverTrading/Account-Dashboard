@@ -10,6 +10,7 @@ class Position:
     symbol: str
     contracts: float
     unrealized_pnl: float
+    notional: float
 
 USER = 'bybit1'  # 新增 USER 变量
 
@@ -35,12 +36,13 @@ def fetch_positions(exchange: ccxt.Exchange) -> Dict[str, Position]:
     for pos in res:
         symbol = pos['symbol']
         side = pos['side']
+        notional = pos['notional']
         if side == 'long':
             contracts = pos['contracts']
         else:
             contracts = -pos['contracts']
         unrealized_pnl = pos['unrealizedPnl']
-        position = Position(symbol, contracts, unrealized_pnl)
+        position = Position(symbol, contracts, unrealized_pnl, notional)
         positions[symbol] = position
     return positions
 
@@ -52,7 +54,7 @@ def init_db(user):
     c.execute(f'''CREATE TABLE IF NOT EXISTS {user}_coin_balance
                  (coin TEXT PRIMARY KEY, balance REAL)''')
     c.execute(f'''CREATE TABLE IF NOT EXISTS {user}_positions
-                 (symbol TEXT PRIMARY KEY, contracts REAL, unrealized_pnl REAL)''')
+                 (symbol TEXT PRIMARY KEY, contracts REAL, unrealized_pnl REAL, notional REAL)''')
     conn.commit()
     conn.close()
 
@@ -133,8 +135,8 @@ def update_positions(exchange: ccxt.Exchange, user):
     current_symbols = set(positions.keys())
     
     for symbol, position in positions.items():
-        c.execute(f"INSERT OR REPLACE INTO {user}_positions VALUES (?, ?, ?)",
-                  (symbol, position.contracts, position.unrealized_pnl))
+        c.execute(f"INSERT OR REPLACE INTO {user}_positions VALUES (?, ?, ?, ?)",
+                  (symbol, position.contracts, position.unrealized_pnl, position.notional))
     
     symbols_to_delete = existing_symbols - current_symbols
     for symbol in symbols_to_delete:
