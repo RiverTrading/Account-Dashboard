@@ -12,8 +12,6 @@ class Position:
     unrealized_pnl: float
     notional: float
 
-USER = 'bybit1'  # 新增 USER 变量
-
 def init_exchange(config: Dict[str, Any]) -> ccxt.Exchange:
     exchange_class = getattr(ccxt, config['exchange_id'])
     exchange = exchange_class(config)
@@ -84,25 +82,6 @@ def rename_tables(conn: sqlite3.Connection, table_names: List[Tuple[str, str]]):
     conn.commit()
     cursor.close()
 
-# def update_coin_balance(exchange: ccxt.Exchange, user):
-#     balances = fetch_coin_balance(exchange)
-#     conn = get_db_connection()
-#     c = conn.cursor()
-#     for coin, balance in balances.items():
-#         c.execute(f"INSERT OR REPLACE INTO {user}_coin_balance VALUES (?, ?)", (coin, balance))
-#     conn.commit()
-#     conn.close()
-
-# def update_positions(exchange: ccxt.Exchange, user):
-#     positions = fetch_positions(exchange)
-#     conn = get_db_connection()
-#     c = conn.cursor()
-#     for symbol, position in positions.items():
-#         c.execute(f"INSERT OR REPLACE INTO {user}_positions VALUES (?, ?, ?)",
-#                   (symbol, position.contracts, position.unrealized_pnl))
-#     conn.commit()
-#     conn.close()
-
 def update_coin_balance(exchange: ccxt.Exchange, user):
     balances = fetch_coin_balance(exchange)
     conn = get_db_connection()
@@ -150,5 +129,5 @@ def update_data(exchange: ccxt.Exchange, user):
     update_total_equity(exchange, user)
     update_coin_balance(exchange, user)
     update_positions(exchange, user)
-    print("数据已更新")
+    print("Data updated")
 
