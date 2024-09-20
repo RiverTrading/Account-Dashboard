@@ -14,3 +14,6 @@ BYBIT_SECRET_2 = config['bybit2']['SECRET']
 
 BINANCE_UNI_API_KEY = config['binance_uni']['API_KEY']
 BINANCE_UNI_SECRET = config['binance_uni']['SECRET']
+
+BINANCE_UNI_API_KEY_2 = config['binance_uni2']['API_KEY']
+BINANCE_UNI_SECRET_2 = config['binance_uni2']['SECRET']

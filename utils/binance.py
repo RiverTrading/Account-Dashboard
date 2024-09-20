@@ -108,7 +108,8 @@ def fetch_account_balance(exchange: ccxt.binance) -> Dict[str, Coin]:
     coins = {}
     res = exchange.papi_get_balance()
     symbols = [f"{coin['asset']}/USDT" for coin in res if float(coin["totalWalletBalance"]) != 0 and coin["asset"] != "USDT"]
-    tickers = exchange.fetch_tickers(symbols)
+    if symbols:
+        tickers = exchange.fetch_tickers(symbols)
 
     for coin in res:
         if float(coin["totalWalletBalance"]) != 0:

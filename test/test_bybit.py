@@ -2,7 +2,7 @@ import pytest
 import utils.binance as binance_utils
 import utils.bybit as bybit_utils
 
-from utils.constants import BYBIT_API_KEY_1, BYBIT_SECRET_1, BINANCE_UNI_API_KEY, BINANCE_UNI_SECRET
+from utils.constants import BYBIT_API_KEY_1, BYBIT_SECRET_1, BINANCE_UNI_API_KEY_2, BINANCE_UNI_SECRET_2
 
 
 
@@ -24,8 +24,8 @@ def binance():
     config = {
         'exchange_id': 'binance',
         'sandbox': False,
-        'apiKey': BINANCE_UNI_API_KEY,
-        'secret': BINANCE_UNI_SECRET, 
+        'apiKey': BINANCE_UNI_API_KEY_2,
+        'secret': BINANCE_UNI_SECRET_2, 
         'enableRateLimit': False,
         'options': {
             'portfolioMargin': True
