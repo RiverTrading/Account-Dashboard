@@ -130,7 +130,7 @@ def fetch_account_balance(exchange: ccxt.binance) -> Dict[str, Coin]:
     return coins
 
 def fetch_total_equity(coins: Dict[str, Coin]) -> float:
-    return sum([(coin.total_wallet_balance+coin.cm_unrealized_pnl+coin.um_unrealized_pnl) * coin.price_in_usdt for coin in coins.values()])
+    return sum([(coin.total_wallet_balance+coin.cm_unrealized_pnl+coin.um_unrealized_pnl-coin.cross_margin_borrowed) * coin.price_in_usdt for coin in coins.values()])
 
 def fetch_cm_position(exchange: ccxt.binance) -> Dict[str, CmPosition]:
     position = {}
@@ -239,7 +239,7 @@ def update_positions(exchange: ccxt.binance, user):
         symbol = pos.symbol
         contracts = pos.position_amt
         unrealized_pnl = pos.un_realized_profit
-        notional = pos.notional
+        notional = abs(pos.notional)
         c.execute(f"INSERT OR REPLACE INTO {user}_um_positions VALUES (?, ?, ?, ?)", 
                   (symbol, contracts, unrealized_pnl, notional))
         current_um_symbols.add(symbol)
