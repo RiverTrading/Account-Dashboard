@@ -3,21 +3,21 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from utils.binance import init_exchange, init_db, update_data
 from utils.constants import CONFIG
 
-BINANCE_UNI_API_KEY_2 = CONFIG['binance_uni2']['API_KEY']
-BINANCE_UNI_SECRET_2 = CONFIG['binance_uni2']['SECRET']
+BINANCE_VIP = CONFIG['binance_vip']['API_KEY']
+BINANCE_VIP_SECRET = CONFIG['binance_vip']['SECRET']
 
 config = {
     'exchange_id': 'binance',
     'sandbox': False,
-    'apiKey': BINANCE_UNI_API_KEY_2,
-    'secret': BINANCE_UNI_SECRET_2, 
+    'apiKey': BINANCE_VIP,
+    'secret': BINANCE_VIP_SECRET, 
     'enableRateLimit': False,
     'options': {
         'portfolioMargin': True
     }
 }
 
-USER = 'binance2'
+USER = 'binance3'
 
 if __name__ == '__main__':
     binance = init_exchange(config)

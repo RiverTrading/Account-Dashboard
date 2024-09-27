@@ -1,7 +1,10 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from utils.bybit import init_exchange, init_db, update_data
-from utils.constants import BYBIT_API_KEY_1, BYBIT_SECRET_1
+from utils.constants import CONFIG
+
+BYBIT_API_KEY_1 = CONFIG['bybit']['API_KEY']
+BYBIT_SECRET_1 = CONFIG['bybit']['SECRET']
 
 config = {
     'exchange_id': 'bybit',
