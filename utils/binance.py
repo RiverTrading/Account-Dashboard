@@ -7,11 +7,6 @@ from typing import Any, Dict
 import ccxt
 import sqlite3
 
-from utils.constants import BINANCE_UNI_API_KEY, BINANCE_UNI_SECRET
-
-
-
-
 
 @dataclass
 class Coin:
