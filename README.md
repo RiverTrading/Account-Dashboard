@@ -1,58 +1,78 @@
 # Data Updater
 
+Data Updater is a tool for fetching user data from exchanges and updating a database. This project uses the APScheduler library to periodically update user coin balances and position information.
+
 ## Project Overview
 
-Data Updater is a tool for fetching user data from the exchange and updating a database. This project utilizes the APScheduler library for scheduling tasks to periodically update users' coin balances and position information.
+- Supports multiple exchanges: Bybit and Binance
+- Uses SQLite database for data storage
+- Automatically updates user data periodically
+- Supports multiple user accounts
 
 ## Dependencies
 
 - Python 3.x
 - `ccxt` library
 - `apscheduler` library
-- Database support (e.g., SQLite)
+- SQLite database
 
-## Installation
+## Quick Start
 
-1. Clone the project to your local machine:
+1. Clone the project:
 
-   ```bash
-   git clone <repository_url>
-   cd <project_directory>
-   ```
+```bash
+git clone <repository_url>
+cd <project_directory>
+```
 
-2. Install the required dependencies:
+2. Install required dependencies:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-3. Configure your API keys and other settings. Please set the `CONFIG` dictionary in the `utils/constants.py` file.
+3. Configure API keys:
 
-## Usage
+Set up your API keys in the `.keys/config.cfg` file.
 
-1. Configure your Bybit API keys in the `user1.py` file:
+4. Run the scripts:
 
-   ```python
-   BYBIT_API_KEY_1 = CONFIG['bybit']['API_KEY']
-   BYBIT_SECRET_1 = CONFIG['bybit']['SECRET']
-   ```
+For Bybit users:
 
-2. Run the script:
+```bash
+python user1.py
+```
 
-   ```bash
-   python user1.py
-   ```
+For Binance users:
 
-   This script will start a scheduler that updates the user's coin balances and position information every 60 seconds.
+```bash
+python user3.py
+```
 
-## Features
+These scripts will start a scheduler that periodically updates the user's coin balances and position information.
 
-- Fetch user coin balances from the Bybit exchange.
-- Retrieve user position information from the Bybit exchange.
-- Store the fetched data in a database.
-- Periodically update data to ensure real-time information.
+## API
+
+The main functionalities are encapsulated in the `utils/bybit.py` and `utils/binance.py` files. Here are the key functions:
+
+### Bybit
+
+- `init_exchange(config)`: Initializes the exchange connection.
+- `fetch_total_equity(exchange)`: Retrieves the total equity.
+- `fetch_coin_balance(exchange)`: Fetches coin balances.
+- `fetch_positions(exchange)`: Gets position information.
+
+### Binance
+
+- `fetch_account_balance(exchange)`: Retrieves account balance information.
+- `fetch_total_equity(coins)`: Calculates the total equity.
+- `fetch_cm_position(exchange)`: Fetches contract market positions.
+- `fetch_um_position(exchange)`: Retrieves spot market positions.
+
+## Data Update
+
+The data update process is encapsulated in the `update_data` function for both Bybit and Binance. This function updates total equity, coin balances, and position information.
 
 ## Contributing
 
-Contributions are welcome! Please submit issues or pull requests.
-
+Issues and pull requests are welcome.
