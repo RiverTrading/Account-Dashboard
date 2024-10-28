@@ -124,8 +124,10 @@ def fetch_account_balance(exchange: ccxt.binance) -> Dict[str, Coin]:
             )
     return coins
 
-def fetch_total_equity(coins: Dict[str, Coin]) -> float:
-    return sum([(coin.total_wallet_balance+coin.cm_unrealized_pnl+coin.um_unrealized_pnl-coin.cross_margin_borrowed) * coin.price_in_usdt for coin in coins.values()])
+def fetch_total_equity(exchange: ccxt.binance) -> float:
+    res = exchange.papi_get_account()
+    return float(res["actualEquity"])
+    # return sum([(coin.total_wallet_balance+coin.cm_unrealized_pnl+coin.um_unrealized_pnl-coin.cross_margin_borrowed) * coin.price_in_usdt for coin in coins.values()])
 
 def fetch_cm_position(exchange: ccxt.binance) -> Dict[str, CmPosition]:
     position = {}
@@ -169,7 +171,7 @@ def fetch_um_position(exchange: ccxt.binance) -> Dict[str, UmPosition]:
 
 def update_total_equity_and_balance(exchange: ccxt.binance, user):
     coins = fetch_account_balance(exchange)
-    total_equity = fetch_total_equity(coins)
+    total_equity = fetch_total_equity(exchange)
     conn = get_db_connection()
     c = conn.cursor()
     
