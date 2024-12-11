@@ -30,7 +30,7 @@ def fetch_coin_balance(exchange: ccxt.Exchange) -> Dict[str, float]:
 
 def fetch_positions(exchange: ccxt.Exchange) -> Dict[str, Position]:
     positions = {}
-    res = exchange.fetch_positions()
+    res = exchange.fetch_positions(params={"limit": 200})
     for pos in res:
         symbol = pos['symbol']
         side = pos['side']
@@ -53,6 +53,8 @@ def init_db(user):
                  (coin TEXT PRIMARY KEY, balance REAL)''')
     c.execute(f'''CREATE TABLE IF NOT EXISTS {user}_positions
                  (symbol TEXT PRIMARY KEY, contracts REAL, unrealized_pnl REAL, notional REAL)''')
+    c.execute(f'''CREATE TABLE IF NOT EXISTS {user}_total_notional
+                 (timestamp INTEGER, notional REAL)''')
     conn.commit()
     conn.close()
 
@@ -105,9 +107,10 @@ def update_coin_balance(exchange: ccxt.Exchange, user):
 
 def update_positions(exchange: ccxt.Exchange, user):
     positions = fetch_positions(exchange)
+    total_notional = sum([p.notional for p in positions.values()])
     conn = get_db_connection()
     c = conn.cursor()
-    
+    c.execute(f"INSERT INTO {user}_total_notional VALUES (?, ?)", (int(time.time()), total_notional))
     c.execute(f"SELECT symbol FROM {user}_positions")
     existing_symbols = set(row[0] for row in c.fetchall())
     

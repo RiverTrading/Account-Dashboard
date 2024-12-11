@@ -24,7 +24,7 @@ if __name__ == '__main__':
     init_db(USER)
 
     scheduler = BlockingScheduler()
-    scheduler.add_job(update_data, 'interval', seconds=5 * 60, args=[binance, USER])
+    scheduler.add_job(update_data, 'interval', seconds= 60, args=[binance, USER])
 
     try:
         scheduler.start()
